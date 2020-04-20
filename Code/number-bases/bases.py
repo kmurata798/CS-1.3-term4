@@ -17,7 +17,17 @@ def decode(digits, base):
     return: int -- integer representation of number (in base 10)"""
     # Handle up to base 36 [0-9a-z]
     assert 2 <= base <= 36, 'base is out of range: {}'.format(base)
+    # # "Cheating" way
+    # #1 get each digit
+    # decimal_num = 0
+    # digits = digits[::-1]
+    # for i in range(len(digits)):
+    #     digit = int(digits[i], base=base)
+    #     decimal_num += digits * base ** i
+    # return decimal_num
+
     # TODO: Decode digits from any base (2 up to 36)
+    print("::DECODE() start::")
     decoded = 0
     strings = string.digits + string.ascii_lowercase
     print(strings)
@@ -25,9 +35,13 @@ def decode(digits, base):
     # digits = digits[::-1] which is reverse ordering of 
 
     for i, number in enumerate(digits):
+        print("i: ", i)
+        print("number: ", number)
+        print("strings.index(number)", strings.index(number))
+        print("strings: ", strings)
         decoded += base**i * strings.index(number)
-        #enumerate adds a counter and an iterable, so the i and number will increase as loop continues
-
+        #enumerate adds a counter and an iterable, so the i will increase as we loop each number
+        print("decoded: ", decoded)
     return decoded
 
 
@@ -40,68 +54,36 @@ def encode(number, base):
     assert 2 <= base <= 36, 'base is out of range: {}'.format(base)
     # Handle unsigned numbers only for now
     assert number >= 0, 'number is negative: {}'.format(number)
-    # TODO: Encode number in hexadecimal (base 16)
-    # given_num = 75
-    # given_num = 144
-    # first_num = 0
-    # second_num = 0
 
-    # remainder = given_num % 16
-    # given_num = int(given_num / 16)
-
-    # first_num = given_num
-    # print("first_num= " + str(first_num))
-    # second_num = remainder
-    # print("second_num= " + str(second_num))
-    # if second_num > 9:
-    #     if second_num == 10:
-    #         second_num = 'A'
-    #     elif second_num == 11:
-    #         second_num = 'B'
-    #     elif second_num == 12:
-    #         second_num = 'C'
-    #     elif second_num == 13:
-    #         second_num = 'D'
-    #     elif second_num == 14:
-    #         second_num = 'E'
-    #     elif second_num == 15:
-    #         second_num = 'F'
-    # if first_num > 9:
-    #     if first_num == 10:
-    #         first_num = 'A'
-    #     elif first_num == 11:
-    #         first_num = 'B'
-    #     elif first_num == 12:
-    #         first_num = 'C'
-    #     elif first_num == 13:
-    #         first_num = 'D'
-    #     elif first_num == 14:
-    #         first_num = 'E'
-    #     elif first_num == 15:
-    #         first_num = 'F'
-    # print("0x" + str(first_num) + str(second_num))
-
+    print("::ENCODE start::")
     encoded = ''
     strings = string.digits + string.ascii_lowercase
     p = 0
     if number == 0:
         return 0
+    # If user wants to convert to base 10, immediately return decoded number (which is already in base 10)
+    elif base == 10:
+        return number
     
     while (base**p) <= number:
         p += 1
 
     while p > 0:
         print('p:', p)
-        div = int(number/(base**(p-1)))
+        div = number//(base**(p-1))
+            #1st 12 / 8 = 1.5 ==> 1
+            #2nd 4 / 4
         print('div:', div)
         convert = min(div, (base-1))
-        print('convert', convert)
+            # 1 = 1 ==> 1
+        print('convert:', convert)
         encoded += strings[convert]
-        print('encoded', encoded)
+            # 0[1]234... ==> 1
+        print('encoded:', encoded)
         number = number - ( convert * base**(p-1))
-        print('#', number)
+            # 12 - ( 1 * 2**3 ) = 12 - 8 = 4
+        print('#: ', number)
         p -= 1
-        print('p',p)
 
     return encoded
 
@@ -116,7 +98,9 @@ def convert(digits, base1, base2):
     assert 2 <= base1 <= 36, 'base1 is out of range: {}'.format(base1)
     assert 2 <= base2 <= 36, 'base2 is out of range: {}'.format(base2)
 
-    return encode(decode(str(digits), base1), base2)
+    print("::CONVERT start::")
+    # Convert digits string to all LOWERCASE words to avoid error if user inputs capital letters for base 16 numbers
+    return encode(decode(str(digits).lower(), base1), base2)
 
 
 def main():
