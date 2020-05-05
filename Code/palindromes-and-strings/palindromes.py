@@ -13,8 +13,8 @@ def is_palindrome(text):
     # implement is_palindrome_iterative and is_palindrome_recursive below, then
     # change this to call your implementation to verify it passes all tests
     assert isinstance(text, str), 'input is not a string: {}'.format(text)
-    return is_palindrome_iterative(text)
-    # return is_palindrome_recursive(text)
+    # return is_palindrome_iterative(text)
+    return is_palindrome_recursive(text)
 
 
 def is_palindrome_iterative(text):
@@ -39,19 +39,38 @@ def is_palindrome_iterative(text):
 
 def is_palindrome_recursive(text, left=None, right=None):
     # TODO: implement the is_palindrome function recursively here
-    if len(text) == 0:
-        return True
-    given = get_letters(text)
-    if left is None and right is None:
-        left = 0
-        right = len(str) - 1
 
-    if given[left] != given[right]:
-        return False
-    elif left >= right:
+    # First time through the function call
+    # Initialize left and right boundaries
+    if left == None:
+        left = 0 
+    
+    if right == None:
+        right = len(text) - 1
+
+    # Check if left boundary crosses or meets with right boundary
+    if left >= right:
         return True
-    else:
-        return is_palindrome_recursive(given, left+1, right-1)
+    
+    # base cases:
+    # Check that the left and right elements are chars, if not, then skip the element and update left or right with next element
+    if text[left].isalpha() is not True:
+        return is_palindrome_recursive(text, left + 1, right)
+    
+    if text[right].isalpha() is not True:
+        return is_palindrome_recursive(text, left, right - 1)
+
+    # Matching chars:
+    # Check whether each letter matches the other
+    if text[left].lower() != text[right].lower():
+        return False 
+    
+    # Recursive call:
+    # Loop case: as long as the left boundary is less than the right, we have not searched through the entire string
+    if left < right: 
+        return is_palindrome_recursive(text, left + 1, right - 1)
+    
+    return True 
     # once implemented, change is_palindrome to call is_palindrome_recursive
     # to verify that your iterative implementation passes all tests
 
