@@ -25,7 +25,7 @@ def is_palindrome_iterative(text):
     first_pt = 0
     second_pt = len(text) - 1
     if len(text) < 1:
-        return True
+        return Truet
 
     while first_pt <= second_pt:
         if text[first_pt].lower() != text[second_pt].lower():
